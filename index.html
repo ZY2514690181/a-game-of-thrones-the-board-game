@@ -8,9 +8,6 @@ body {
   font-family: Arial, sans-serif;
   margin: 30px;
 }
-#panel-wrapper {
-  margin-top: 50px; /* leave space below the fixed top sidebar */
-}
 h1 {
   text-align: center;
   font-size: 32px;
@@ -97,30 +94,22 @@ h1 {
   flex-shrink: 0; 
 }
 
-/* Top horizontal sidebar */
-#sidebar {
+/* Top sidebar */
+#top-sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   display: flex;
-  flex-direction: row; /* horizontal */
   gap: 8px;
-  padding: 5px;
+  padding: 6px;
+  background: #fff;
   z-index: 1000;
-  background-color: white;
 }
 
-/* Color buttons */
+/* Color palette buttons */
 .color-btn {
   width:30px; height:30px; border:2px solid black; border-radius:4px; cursor:pointer;
   padding:0; margin:0;
-}
-
-/* Clear all button */
-#clear-all {
-  padding:4px 6px;
-  font-size:14px;
 }
 
 /* Responsive */
@@ -143,9 +132,8 @@ h1 {
 <div id="panel-wrapper">
 <h1>玩家实力面板</h1>
 
-<!-- Top horizontal sidebar -->
-<div id="sidebar">
-  <!-- Colors -->
+<!-- Top sidebar -->
+<div id="top-sidebar">
   <button class="color-btn" data-color="#FF0000" style="background:#FF0000;"></button>
   <button class="color-btn" data-color="#FFA500" style="background:#FFA500;"></button>
   <button class="color-btn" data-color="#FFFF00" style="background:#FFFF00;"></button>
@@ -159,8 +147,7 @@ h1 {
   <button class="color-btn" data-color="#FF69B4" style="background:#FF69B4;"></button>
   <button class="color-btn" data-color="#A52A2A" style="background:#A52A2A;"></button>
   <button class="color-btn" data-color="#808080" style="background:#808080;"></button>
-  <!-- Clear all -->
-  <button id="clear-all">一键清空</button>
+  <button id="clear-all" style="padding:4px 6px; font-size:14px;">一键清空</button>
 </div>
 
 <div class="top-row">
@@ -218,9 +205,7 @@ h1 {
 
 <!-- html2canvas -->
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
 <script>
-// Global state
 window.selectedColor = "#FF0000";
 window.starStates = [];
 
@@ -317,41 +302,39 @@ function initialize() {
     updateRank();
   });
 
-  // Download with sidebar excluded
   document.getElementById('download-btn').addEventListener('click', ()=>{
     const panel = document.getElementById('panel-wrapper');
-    const sidebar = document.getElementById('sidebar');
-    const input = document.getElementById('player-name-input');
 
-    // Replace input with span temporarily
+    // Hide sidebar and clear buttons temporarily
+    const sidebar = document.getElementById('top-sidebar');
+    const clearButtons = panel.querySelectorAll('.clear-btn');
+    sidebar.style.display = 'none';
+    clearButtons.forEach(btn => btn.style.display = 'none');
+
+    // Replace input with span
+    const input = document.getElementById('player-name-input');
     const tempSpan = document.createElement('span');
     tempSpan.innerText = input.value || 'player';
     tempSpan.style.fontSize = getComputedStyle(input).fontSize;
     tempSpan.style.fontFamily = getComputedStyle(input).fontFamily;
     tempSpan.style.color = getComputedStyle(input).color;
     tempSpan.style.marginLeft = input.style.marginLeft;
-
     input.style.display = 'none';
     input.parentNode.appendChild(tempSpan);
 
-    // Hide sidebar temporarily
-    sidebar.style.display = 'none';
+    html2canvas(panel, { backgroundColor:'#ffffff', scrollY:-window.scrollY, scrollX:-window.scrollX })
+      .then(canvas=>{
+        const link = document.createElement('a');
+        link.download = `${tempSpan.innerText}的面板.jpg`;
+        link.href = canvas.toDataURL('image/jpeg', 1.0);
+        link.click();
 
-    html2canvas(panel, {
-      backgroundColor:'#ffffff',
-      scrollY: -window.scrollY,
-      scrollX: -window.scrollX
-    }).then(canvas=>{
-      const link = document.createElement('a');
-      link.download = `${tempSpan.innerText}的面板.jpg`;
-      link.href = canvas.toDataURL('image/jpeg', 1.0);
-      link.click();
-
-      // Restore
-      input.style.display = '';
-      tempSpan.remove();
-      sidebar.style.display = '';
-    });
+        // Restore everything
+        input.style.display = '';
+        tempSpan.remove();
+        sidebar.style.display = '';
+        clearButtons.forEach(btn => btn.style.display = '');
+      });
   });
 }
 
