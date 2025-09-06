@@ -8,6 +8,9 @@ body {
   font-family: Arial, sans-serif;
   margin: 30px;
 }
+#panel-wrapper {
+  margin-top: 50px; /* leave space below the fixed top sidebar */
+}
 h1 {
   text-align: center;
   font-size: 32px;
@@ -94,10 +97,30 @@ h1 {
   flex-shrink: 0; 
 }
 
-/* Color palette (fixed left) */
+/* Top horizontal sidebar */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: row; /* horizontal */
+  gap: 8px;
+  padding: 5px;
+  z-index: 1000;
+  background-color: white;
+}
+
+/* Color buttons */
 .color-btn {
   width:30px; height:30px; border:2px solid black; border-radius:4px; cursor:pointer;
   padding:0; margin:0;
+}
+
+/* Clear all button */
+#clear-all {
+  padding:4px 6px;
+  font-size:14px;
 }
 
 /* Responsive */
@@ -117,30 +140,27 @@ h1 {
 </style>
 </head>
 <body>
+<div id="panel-wrapper">
 <h1>玩家实力面板</h1>
 
-<!-- Fixed color palette (far left) -->
-<div style="position: fixed; top: 50px; left: 10px; display: flex; flex-direction: column; gap: 8px; z-index:1000;">
-  <!-- Red, Orange, Yellow -->
+<!-- Top horizontal sidebar -->
+<div id="sidebar">
+  <!-- Colors -->
   <button class="color-btn" data-color="#FF0000" style="background:#FF0000;"></button>
   <button class="color-btn" data-color="#FFA500" style="background:#FFA500;"></button>
   <button class="color-btn" data-color="#FFFF00" style="background:#FFFF00;"></button>
-  <!-- Green shades -->
   <button class="color-btn" data-color="#008000" style="background:#008000;"></button>
   <button class="color-btn" data-color="#32CD32" style="background:#32CD32;"></button>
   <button class="color-btn" data-color="#00FF00" style="background:#00FF00;"></button>
-  <!-- Blue shades -->
   <button class="color-btn" data-color="#0000FF" style="background:#0000FF;"></button>
   <button class="color-btn" data-color="#1E90FF" style="background:#1E90FF;"></button>
   <button class="color-btn" data-color="#00BFFF" style="background:#00BFFF;"></button>
-  <!-- Purple, Pink, Brown, Gray -->
   <button class="color-btn" data-color="#800080" style="background:#800080;"></button>
   <button class="color-btn" data-color="#FF69B4" style="background:#FF69B4;"></button>
   <button class="color-btn" data-color="#A52A2A" style="background:#A52A2A;"></button>
   <button class="color-btn" data-color="#808080" style="background:#808080;"></button>
-
-  <!-- Clear all stars button -->
-  <button id="clear-all-btn" style="padding:4px; margin-top:10px; cursor:pointer;">一键清空</button>
+  <!-- Clear all -->
+  <button id="clear-all">一键清空</button>
 </div>
 
 <div class="top-row">
@@ -189,13 +209,21 @@ h1 {
     <div class="star-line"><span class="label-text">多媒体攻略分享</span><span class="stars"></span><button class="clear-btn">清空</button></div>
   </div>
 </div>
+</div>
+
+<!-- Download button -->
+<div style="text-align:center; margin-top:20px;">
+  <button id="download-btn" style="font-size:16px; padding:6px 12px;">下载面板截图</button>
+</div>
+
+<!-- html2canvas -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script>
 // Global state
 window.selectedColor = "#FF0000";
-window.starStates = []; // Array to store filled state of each star line
+window.starStates = [];
 
-// Rank computation
 function computeRank(totalStars){
   if(totalStars>=76) return 'S';
   if(totalStars>=61) return 'A';
@@ -205,37 +233,29 @@ function computeRank(totalStars){
   return 'E';
 }
 
-// SVG star generator
 function createStar(filled = false) {
   const svgNS = "http://www.w3.org/2000/svg";
   const star = document.createElementNS(svgNS, "svg");
   star.setAttribute("viewBox", "0 0 24 24");
   const color = filled ? window.selectedColor : 'white';
-  star.innerHTML = `<polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="${color}" stroke="black"/>`;
+  star.innerHTML = `<polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="${color}"/>`;
   return star;
 }
 
-// Initialize star states array
 function initializeStarStates() {
   const starLines = document.querySelectorAll('.star-line');
   window.starStates = [];
-  starLines.forEach(() => {
-    window.starStates.push(0); // 0 means no stars filled
-  });
+  starLines.forEach(() => window.starStates.push(0));
 }
 
-// Render all stars based on current state
 function renderAllStars() {
   const starLines = document.querySelectorAll('.star-line');
   
   starLines.forEach((line, lineIndex) => {
     const starsContainer = line.querySelector('.stars');
     const clearBtn = line.querySelector('.clear-btn');
-    
-    // Clear existing stars
     starsContainer.innerHTML = '';
     
-    // Create 5 stars based on current state
     for(let i = 0; i < 5; i++) {
       const isFilled = i < window.starStates[lineIndex];
       const star = createStar(isFilled);
@@ -243,68 +263,98 @@ function renderAllStars() {
       starsContainer.appendChild(star);
     }
     
-    // Add event listeners to new stars
     const starSpans = starsContainer.querySelectorAll('svg');
     
     starSpans.forEach(span => {
       span.addEventListener('mouseenter', () => {
         const index = parseInt(span.dataset.index);
-        starSpans.forEach((s, i) => s.classList.toggle('hover', i <= index));
+        starSpans.forEach((s,i)=> s.classList.toggle('hover',i<=index));
       });
       
       span.addEventListener('mouseleave', () => {
-        starSpans.forEach(s => s.classList.remove('hover'));
+        starSpans.forEach(s=> s.classList.remove('hover'));
       });
       
       span.addEventListener('click', () => {
         const index = parseInt(span.dataset.index);
-        window.starStates[lineIndex] = index + 1; // Update state
-        renderAllStars(); // Re-render everything
+        window.starStates[lineIndex] = index+1;
+        renderAllStars();
         updateRank();
       });
     });
     
-    // Clear button event listener
     clearBtn.onclick = () => {
-      window.starStates[lineIndex] = 0; // Update state
-      renderAllStars(); // Re-render everything
+      window.starStates[lineIndex] = 0;
+      renderAllStars();
       updateRank();
     };
   });
 }
 
-// Update the rank
 function updateRank() {
-  const total = window.starStates.reduce((sum, count) => sum + count, 0);
+  const total = window.starStates.reduce((sum,count)=>sum+count,0);
   const rankDisplay = document.getElementById('rank-display');
   rankDisplay.innerText = computeRank(total);
   rankDisplay.style.color = window.selectedColor;
 }
 
-// Initialize everything
 function initialize() {
   initializeStarStates();
   renderAllStars();
   updateRank();
   
-  // Handle color palette buttons
-  document.querySelectorAll('.color-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll('.color-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
       window.selectedColor = btn.dataset.color;
-      renderAllStars(); // Re-render everything with new color
+      renderAllStars();
       updateRank();
     });
   });
 
-  // Handle "一键清空" button
-  document.getElementById('clear-all-btn').addEventListener('click', () => {
-    window.starStates = window.starStates.map(() => 0);
+  document.getElementById('clear-all').addEventListener('click', ()=>{
+    window.starStates = window.starStates.map(()=>0);
     renderAllStars();
     updateRank();
   });
+
+  // Download with sidebar excluded
+  document.getElementById('download-btn').addEventListener('click', ()=>{
+    const panel = document.getElementById('panel-wrapper');
+    const sidebar = document.getElementById('sidebar');
+    const input = document.getElementById('player-name-input');
+
+    // Replace input with span temporarily
+    const tempSpan = document.createElement('span');
+    tempSpan.innerText = input.value || 'player';
+    tempSpan.style.fontSize = getComputedStyle(input).fontSize;
+    tempSpan.style.fontFamily = getComputedStyle(input).fontFamily;
+    tempSpan.style.color = getComputedStyle(input).color;
+    tempSpan.style.marginLeft = input.style.marginLeft;
+
+    input.style.display = 'none';
+    input.parentNode.appendChild(tempSpan);
+
+    // Hide sidebar temporarily
+    sidebar.style.display = 'none';
+
+    html2canvas(panel, {
+      backgroundColor:'#ffffff',
+      scrollY: -window.scrollY,
+      scrollX: -window.scrollX
+    }).then(canvas=>{
+      const link = document.createElement('a');
+      link.download = `${tempSpan.innerText}的面板.jpg`;
+      link.href = canvas.toDataURL('image/jpeg', 1.0);
+      link.click();
+
+      // Restore
+      input.style.display = '';
+      tempSpan.remove();
+      sidebar.style.display = '';
+    });
+  });
 }
 
-// Start the app
 initialize();
 </script>
 </body>
