@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>玩家实力面板</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 30px;
+}
+h1 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+/* Top row */
+.top-row {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin-bottom: 30px;
+  align-items: center;
+}
+.top-row .column {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+}
+#player-name-input {
+  font-size:28px; 
+  width:150px; 
+  background:transparent; 
+  color:black;
+}
+
+/* 综合评级 display */
+#rank-display {
+  font-family:'Palatino Linotype','Book Antiqua',serif;
+  font-size:80px; 
+  font-weight:bold;
+  margin-left:10px;
+}
+
+/* Main columns */
+.columns-container {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
+.column-content {
+  width: 300px;
+}
+
+/* Sections */
+.section-title {
+  font-weight: bold;
+  font-size: 24px;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+.spacer { margin: 15px 0; }
+
+/* Star line */
+.star-line {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-wrap: nowrap;
+}
+.label-text {
+  width: 140px;
+}
+.stars {
+  margin-left: 10px;
+  display: flex;
+  gap: 4px;
+  cursor: pointer;
+}
+.stars svg {
+  width: 22px;
+  height: 22px;
+  stroke: black;
+  stroke-width: 1;
+  fill: white;
+  transition: fill 0.2s;
+}
+.clear-btn { 
+  margin-left: 10px; 
+  font-size: 14px; 
+  padding: 1px 4px; 
+  cursor: pointer; 
+  flex-shrink: 0; 
+}
+
+/* Color palette (fixed left) */
+.color-btn {
+  width:30px; height:30px; border:2px solid black; border-radius:4px; cursor:pointer;
+  padding:0; margin:0;
+}
+
+/* Responsive */
+@media(max-width:900px){
+  h1{font-size:28px;}
+  .top-row .column{font-size:24px;}
+  #player-name-input{font-size:24px;}
+  #rank-display{font-size:60px;}
+  .section-title{font-size:20px;}
+  .stars svg{width:18px;height:18px;}
+}
+@media(max-width:600px){
+  .top-row{flex-direction:column; gap:20px;}
+  .columns-container{flex-direction:column; gap:30px;}
+  .label-text{width:120px;}
+}
+</style>
+</head>
+<body>
+<h1>玩家实力面板</h1>
+
+<!-- Fixed color palette (far left) -->
+<div style="position: fixed; top: 50px; left: 10px; display: flex; flex-direction: column; gap: 8px; z-index:1000;">
+  <!-- Red, Orange, Yellow -->
+  <button class="color-btn" data-color="#FF0000" style="background:#FF0000;"></button>
+  <button class="color-btn" data-color="#FFA500" style="background:#FFA500;"></button>
+  <button class="color-btn" data-color="#FFFF00" style="background:#FFFF00;"></button>
+  <!-- Green shades -->
+  <button class="color-btn" data-color="#008000" style="background:#008000;"></button>
+  <button class="color-btn" data-color="#32CD32" style="background:#32CD32;"></button>
+  <button class="color-btn" data-color="#00FF00" style="background:#00FF00;"></button>
+  <!-- Blue shades -->
+  <button class="color-btn" data-color="#0000FF" style="background:#0000FF;"></button>
+  <button class="color-btn" data-color="#1E90FF" style="background:#1E90FF;"></button>
+  <button class="color-btn" data-color="#00BFFF" style="background:#00BFFF;"></button>
+  <!-- Purple, Pink, Brown, Gray -->
+  <button class="color-btn" data-color="#800080" style="background:#800080;"></button>
+  <button class="color-btn" data-color="#FF69B4" style="background:#FF69B4;"></button>
+  <button class="color-btn" data-color="#A52A2A" style="background:#A52A2A;"></button>
+  <button class="color-btn" data-color="#808080" style="background:#808080;"></button>
+
+  <!-- Clear all stars button -->
+  <button id="clear-all-btn" style="padding:4px; margin-top:10px; cursor:pointer;">一键清空</button>
+</div>
+
+<div class="top-row">
+  <div class="column">
+    <label>玩家名</label>
+    <input type="text" id="player-name-input" placeholder="输入名字">
+  </div>
+  <div class="column">
+    <label>综合评级</label>
+    <span id="rank-display"></span>
+  </div>
+</div>
+
+<div class="columns-container">
+  <!-- Left column -->
+  <div class="column-content">
+    <div class="section-title">计算</div>
+    <div class="star-line"><span class="label-text">获胜能力</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">布标能力</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">地盘兵力运营</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">竞标运营</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">战斗将卡运营</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">大局观</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">抢七阻七</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">思考效率</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="spacer"></div>
+    <div class="section-title">外交</div>
+    <div class="star-line"><span class="label-text">阴谋规划</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">预防背刺</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">信用</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+  </div>
+
+  <!-- Right column -->
+  <div class="column-content">
+    <div class="section-title">规则</div>
+    <div class="star-line"><span class="label-text">基础规则</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">官方变体</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">社区规则</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">娱乐玩法</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="spacer"></div>
+    <div class="section-title">社区</div>
+    <div class="star-line"><span class="label-text">高难对局场次</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">赛事活跃度</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">知名度</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">招新贡献</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+    <div class="star-line"><span class="label-text">多媒体攻略分享</span><span class="stars"></span><button class="clear-btn">清空</button></div>
+  </div>
+</div>
+
+<script>
+// Global state
+window.selectedColor = "#FF0000";
+window.starStates = []; // Array to store filled state of each star line
+
+// Rank computation
+function computeRank(totalStars){
+  if(totalStars>=76) return 'S';
+  if(totalStars>=61) return 'A';
+  if(totalStars>=46) return 'B';
+  if(totalStars>=31) return 'C';
+  if(totalStars>=16) return 'D';
+  return 'E';
+}
+
+// SVG star generator
+function createStar(filled = false) {
+  const svgNS = "http://www.w3.org/2000/svg";
+  const star = document.createElementNS(svgNS, "svg");
+  star.setAttribute("viewBox", "0 0 24 24");
+  const color = filled ? window.selectedColor : 'white';
+  star.innerHTML = `<polygon points="12,2 15,9 22,9 16,14 18,21 12,17 6,21 8,14 2,9 9,9" fill="${color}" stroke="black"/>`;
+  return star;
+}
+
+// Initialize star states array
+function initializeStarStates() {
+  const starLines = document.querySelectorAll('.star-line');
+  window.starStates = [];
+  starLines.forEach(() => {
+    window.starStates.push(0); // 0 means no stars filled
+  });
+}
+
+// Render all stars based on current state
+function renderAllStars() {
+  const starLines = document.querySelectorAll('.star-line');
+  
+  starLines.forEach((line, lineIndex) => {
+    const starsContainer = line.querySelector('.stars');
+    const clearBtn = line.querySelector('.clear-btn');
+    
+    // Clear existing stars
+    starsContainer.innerHTML = '';
+    
+    // Create 5 stars based on current state
+    for(let i = 0; i < 5; i++) {
+      const isFilled = i < window.starStates[lineIndex];
+      const star = createStar(isFilled);
+      star.dataset.index = i;
+      starsContainer.appendChild(star);
+    }
+    
+    // Add event listeners to new stars
+    const starSpans = starsContainer.querySelectorAll('svg');
+    
+    starSpans.forEach(span => {
+      span.addEventListener('mouseenter', () => {
+        const index = parseInt(span.dataset.index);
+        starSpans.forEach((s, i) => s.classList.toggle('hover', i <= index));
+      });
+      
+      span.addEventListener('mouseleave', () => {
+        starSpans.forEach(s => s.classList.remove('hover'));
+      });
+      
+      span.addEventListener('click', () => {
+        const index = parseInt(span.dataset.index);
+        window.starStates[lineIndex] = index + 1; // Update state
+        renderAllStars(); // Re-render everything
+        updateRank();
+      });
+    });
+    
+    // Clear button event listener
+    clearBtn.onclick = () => {
+      window.starStates[lineIndex] = 0; // Update state
+      renderAllStars(); // Re-render everything
+      updateRank();
+    };
+  });
+}
+
+// Update the rank
+function updateRank() {
+  const total = window.starStates.reduce((sum, count) => sum + count, 0);
+  const rankDisplay = document.getElementById('rank-display');
+  rankDisplay.innerText = computeRank(total);
+  rankDisplay.style.color = window.selectedColor;
+}
+
+// Initialize everything
+function initialize() {
+  initializeStarStates();
+  renderAllStars();
+  updateRank();
+  
+  // Handle color palette buttons
+  document.querySelectorAll('.color-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.selectedColor = btn.dataset.color;
+      renderAllStars(); // Re-render everything with new color
+      updateRank();
+    });
+  });
+
+  // Handle "一键清空" button
+  document.getElementById('clear-all-btn').addEventListener('click', () => {
+    window.starStates = window.starStates.map(() => 0);
+    renderAllStars();
+    updateRank();
+  });
+}
+
+// Start the app
+initialize();
+</script>
+</body>
+</html>
