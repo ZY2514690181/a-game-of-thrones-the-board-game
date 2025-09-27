@@ -166,7 +166,7 @@ function initialize() {
         const players = lines.slice(1).map(line => {
           const fields = line.split('\t');
           const obj = {};
-          headers.forEach((h, i) => obj[h] = fields[i]);
+          headers.forEach((h, i) => obj[h.trim()] = fields[i].trim());
           return obj;
         });
 
