@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>玩家实力面板</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-link">首页</a>
+    <a href="panel.html" class="nav-link active">玩家实力面板</a>
+    <a href="data.html" class="nav-link">查看玩家数据</a>
+  </nav>
+
+  <!-- Top sidebar -->
+  <div id="top-sidebar">
+    <button class="color-btn" data-color="#FF0000" style="background:#FF0000;"></button>
+    <button class="color-btn" data-color="#FFA500" style="background:#FFA500;"></button>
+    <button class="color-btn" data-color="#FFFF00" style="background:#FFFF00;"></button>
+    <button class="color-btn" data-color="#008000" style="background:#008000;"></button>
+    <button class="color-btn" data-color="#32CD32" style="background:#32CD32;"></button>
+    <button class="color-btn" data-color="#00FF00" style="background:#00FF00;"></button>
+    <button class="color-btn" data-color="#0000FF" style="background:#0000FF;"></button>
+    <button class="color-btn" data-color="#1E90FF" style="background:#1E90FF;"></button>
+    <button class="color-btn" data-color="#00BFFF" style="background:#00BFFF;"></button>
+    <button class="color-btn" data-color="#800080" style="background:#800080;"></button>
+    <button class="color-btn" data-color="#FF69B4" style="background:#FF69B4;"></button>
+    <button class="color-btn" data-color="#A52A2A" style="background:#A52A2A;"></button>
+    <button class="color-btn" data-color="#808080" style="background:#808080;"></button>
+    <button id="clear-all" style="padding:4px 6px; font-size:14px;">一键清空</button>
+  </div>
+
+  <!-- Main panel content -->
+  <div id="panel-wrapper">
+    <h1>玩家实力面板</h1>
+
+    <div class="top-row">
+      <div class="column">
+        <label>玩家名</label>
+        <input type="text" id="player-name-input" placeholder="输入名字">
+      </div>
+      <div class="column">
+        <label>综合评级</label>
+        <span id="rank-display"></span>
+      </div>
+    </div>
+
+    <div class="columns-container">
+      <!-- Left column -->
+      <div class="column-content">
+        <div class="section-title">计算</div>
+        <div class="star-line"><span class="label-text">获胜能力</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">布标能力</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">地盘兵力运营</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">竞标运营</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">战斗将卡运营</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">大局观</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">抢七阻七</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">思考效率</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="spacer"></div>
+        <div class="section-title">外交</div>
+        <div class="star-line"><span class="label-text">阴谋规划</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">预防背刺</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">信用</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+      </div>
+
+      <!-- Right column -->
+      <div class="column-content">
+        <div class="section-title">规则</div>
+        <div class="star-line"><span class="label-text">基础规则</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">官方变体</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">社区规则</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">娱乐玩法</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="spacer"></div>
+        <div class="section-title">社区</div>
+        <div class="star-line"><span class="label-text">高难对局场次</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">赛事活跃度</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">知名度</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">招新贡献</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+        <div class="star-line"><span class="label-text">多媒体攻略分享</span><span class="stars"></span><button
+            class="clear-btn">清空</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download button -->
+  <div style="text-align:center; margin-top:20px;">
+    <button id="download-btn" style="font-size:16px; padding:6px 12px;">下载面板截图</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

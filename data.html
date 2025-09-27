@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>查看玩家数据</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="top-nav">
+    <a href="index.html" class="nav-link">首页</a>
+    <a href="panel.html" class="nav-link">玩家实力面板</a>
+    <a href="data.html" class="nav-link active">查看玩家数据</a>
+  </nav>
+
+  <!-- Main content -->
+  <div style="display:flex; margin-top:20px; gap:20px;">
+
+    <!-- Left sidebar: list of player names -->
+    <div id="sidebar" style="width:200px; border-right:1px solid #ccc; padding:10px;">
+      <!-- JS will populate this -->
+      <ul id="player-list"></ul>
+    </div>
+
+    <!-- Right panel: read-only panel-wrapper -->
+    <div id="panel-wrapper" style="flex:1;">
+      <!-- JS will render the selected player's panel here -->
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
