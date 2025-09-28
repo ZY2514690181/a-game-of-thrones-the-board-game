@@ -194,10 +194,14 @@ function renderPlayerPanel(player) {
   window.selectedColor = player.color || '#FF0000';
   const panel = document.getElementById('panel-wrapper');
   panel.innerHTML = `
-    <h1>${player.name}</h1>
+    <h1>玩家实力面板</h1>
     <div class="top-row">
       <div class="column">
         <label>玩家名</label>
+        <span>${player.name}</span>
+      </div>
+      <div class="column">
+        <label>综合评级</label>
         <span id="rank-display"></span>
       </div>
     </div>
@@ -208,26 +212,46 @@ function renderPlayerPanel(player) {
     </div>
   `;
 
-  // Fill star lines
-  const leftFields = ['获胜能力', '布标能力', '地盘兵力运营', '竞标运营', '战斗将卡运营', '大局观', '抢七阻七', '思考效率', '阴谋规划', '预防背刺', '信用'];
-  const rightFields = ['基础规则', '官方变体', '社区规则', '娱乐玩法', '高难对局场次', '赛事活跃度', '知名度', '招新贡献', '多媒体攻略分享'];
+  // Categories from panel.html
+  const leftFields = [
+    { section: '计算', items: ['获胜能力', '布标能力', '地盘兵力运营', '竞标运营', '战斗将卡运营', '大局观', '抢七阻七', '思考效率'] },
+    { section: '外交', items: ['阴谋规划', '预防背刺', '信用'] }
+  ];
+  const rightFields = [
+    { section: '规则', items: ['基础规则', '官方变体', '社区规则', '娱乐玩法'] },
+    { section: '社区', items: ['高难对局场次', '赛事活跃度', '知名度', '招新贡献', '多媒体攻略分享'] }
+  ];
 
   window.starStates = [];
 
   function createStarLine(field) {
-    const stars = Array.from({ length: 5 }, (_, i) => i < (player[field] || 0) ? 1 : 0);
-    window.starStates.push(stars.filter(s => s).length);
+    const value = Number(player[field]) || 0; // ensure numeric
+    window.starStates.push(value);
     const line = document.createElement('div');
     line.className = 'star-line';
-    line.innerHTML = `<span class="label-text">${field}</span><span class="stars"></span><button class="clear-btn">清空</button>`;
+    line.innerHTML = `<span class="label-text">${field}</span><span class="stars"></span><span class="clear-btn" style="display:none;">✕</span>`;
     return line;
   }
 
   const leftCol = document.getElementById('left-column');
-  leftFields.forEach(f => leftCol.appendChild(createStarLine(f)));
+  leftFields.forEach(group => {
+    const title = document.createElement('div');
+    title.className = 'section-title';
+    title.textContent = group.section;
+    leftCol.appendChild(title);
+    group.items.forEach(f => leftCol.appendChild(createStarLine(f)));
+    leftCol.appendChild(document.createElement('div')).className = 'spacer';
+  });
 
   const rightCol = document.getElementById('right-column');
-  rightFields.forEach(f => rightCol.appendChild(createStarLine(f)));
+  rightFields.forEach(group => {
+    const title = document.createElement('div');
+    title.className = 'section-title';
+    title.textContent = group.section;
+    rightCol.appendChild(title);
+    group.items.forEach(f => rightCol.appendChild(createStarLine(f)));
+    rightCol.appendChild(document.createElement('div')).className = 'spacer';
+  });
 
   renderAllStars(true); // read-only
   updateRank();
