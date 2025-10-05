@@ -273,6 +273,24 @@ function renderPlayerPanel(player) {
 }
 
 /* ===========================
+   Personal Maps Page
+=========================== */
+if (document.getElementById('map-list')) {
+  const mapList = document.getElementById('map-list');
+  const mapDisplay = document.getElementById('map-display');
+
+  mapList.querySelectorAll('li').forEach(li => {
+    // Optional: give same style as player-list
+    li.classList.add('map-li');
+
+    li.addEventListener('click', () => {
+      const file = li.dataset.file;
+      mapDisplay.src = "../maps/" + file;
+    });
+  });
+}
+
+/* ===========================
    Start
 =========================== */
 document.addEventListener('DOMContentLoaded', initialize);

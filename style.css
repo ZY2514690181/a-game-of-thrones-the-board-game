@@ -12,10 +12,14 @@ body {
 .top-nav {
   display: flex;
   gap: 12px;
-  padding: 12px 20px;   /* add vertical and horizontal padding */
-  background-color: #f0f0f0;  /* light gray background to separate from body */
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* subtle shadow for depth */
-  position: sticky;      /* optional: keeps header at top when scrolling */
+  padding: 12px 20px;
+  /* add vertical and horizontal padding */
+  background-color: #f0f0f0;
+  /* light gray background to separate from body */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* subtle shadow for depth */
+  position: sticky;
+  /* optional: keeps header at top when scrolling */
   top: 0;
   z-index: 1000;
 }
@@ -28,7 +32,8 @@ body {
 }
 
 .top-nav .nav-link:hover {
-  background-color: #d0d0d0; /* subtle hover effect */
+  background-color: #d0d0d0;
+  /* subtle hover effect */
 }
 
 .top-nav .nav-link.active {
@@ -46,8 +51,12 @@ body {
 }
 
 #panel-wrapper {
-  margin: 0 auto;  /* center the wrapper */
-  max-width: 900px; /* optional, keeps layout neat for download */
+  flex: 1;
+  /* allow the panel to take remaining space */
+  margin: 0 auto;
+  /* center the wrapper */
+  max-width: 900px;
+  /* optional, keeps layout neat for download */
 }
 
 .top-row {
@@ -163,10 +172,11 @@ body {
    Data Page Sidebar
 =========================== */
 #sidebar {
-  width: 200px;
+  width: 350px;
   border-right: 1px solid #ccc;
   padding: 10px;
-  min-height: calc(100vh - 70px); /* 100% of viewport height minus header height */
+  min-height: calc(100vh - 70px);
+  /* 100% of viewport height minus header height */
   box-sizing: border-box;
 }
 
@@ -185,18 +195,23 @@ body {
   h1 {
     font-size: 28px;
   }
+
   .top-row .column {
     font-size: 24px;
   }
+
   #player-name-input {
     font-size: 24px;
   }
+
   #rank-display {
     font-size: 60px;
   }
+
   .section-title {
     font-size: 20px;
   }
+
   .stars svg {
     width: 18px;
     height: 18px;
@@ -208,17 +223,19 @@ body {
     flex-direction: column;
     gap: 20px;
   }
+
   .columns-container {
     flex-direction: column;
     gap: 30px;
   }
+
   .label-text {
     width: 120px;
   }
 }
 
 #player-list li {
-  list-style: none;         /* remove bullets */
+  list-style: none;
   padding: 8px 12px;
   margin-bottom: 8px;
   background-color: #f8f8f8;
@@ -230,6 +247,28 @@ body {
 }
 
 #player-list li:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-1px);
+}
+
+#player-list li,
+#map-list li,
+.map-li {
+  /* map buttons class */
+  list-style: none;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#player-list li:hover,
+#map-list li:hover,
+.map-li:hover {
   background-color: #e0e0e0;
   transform: translateY(-1px);
 }
