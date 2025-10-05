@@ -95,6 +95,21 @@ function updateRank() {
    Initialize Page
 =========================== */
 function initialize() {
+  // Load header partial
+  fetch('../partials/header.html')
+    .then(resp => resp.text())
+    .then(html => {
+      document.body.insertAdjacentHTML('afterbegin', html);
+
+      // Highlight current page link
+      const links = document.querySelectorAll('.top-nav .nav-link');
+      links.forEach(link => {
+        if (link.href.endsWith(location.pathname.split('/').pop())) {
+          link.classList.add('active');
+        }
+      });
+    });
+
   // Color palette
   document.querySelectorAll('.color-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -158,7 +173,7 @@ function initialize() {
 
   // Data page initialization
   if (document.getElementById('player-list')) {
-    fetch('data/players.tsv')
+    fetch('../data/players.tsv')
       .then(response => response.text())
       .then(text => {
         const lines = text.trim().split('\n');
